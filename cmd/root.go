@@ -1,10 +1,8 @@
-/*
-Copyright © 2025 samanar ahmadianrad.saman@gmail.com
-*/
 package cmd
 
 import (
 	"ffwizard/ffmpeg"
+	"ffwizard/tui"
 	"fmt"
 	"os"
 
@@ -34,6 +32,12 @@ var rootCmd = &cobra.Command{
 	Use:   "ffwizard",
 	Short: "Interactive CLI to build and run FFmpeg commands",
 	Run: func(cmd *cobra.Command, args []string) {
+		var err error
+		actions, err = tui.RunWizard()
+		if err != nil {
+			fmt.Println("Error in TUI:", err)
+			os.Exit(1)
+		}
 		fmt.Println("No subcommands provided")
 	},
 }
@@ -102,5 +106,15 @@ func Execute() {
 		fmt.Println("Input file is required")
 		os.Exit(1)
 	}
+
+	if len(actions) == 0 {
+		var err error
+		actions, err = tui.RunWizard()
+		if err != nil {
+			fmt.Println("Error in TUI:", err)
+			os.Exit(1)
+		}
+	}
+
 	ffmpeg.RunFFmpeg(input, output, actions)
 }
