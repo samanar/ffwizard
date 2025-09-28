@@ -14,9 +14,10 @@ import (
 
 // RenderItem represents one selectable action in the wizard
 type Item struct {
-	title  string
-	desc   string
-	action ffmpeg.Action
+	title    string
+	desc     string
+	action   ffmpeg.Action
+	goToStep uint
 }
 
 func (i Item) Title() string       { return i.title }
