@@ -12,5 +12,5 @@ Use it in two ways:
 
 - Chain multiple actions into a single ffmpeg run:
   ```bash
-  ffmpeg-tool -i input.mp4 -o output.mp4 resize --width 720 --height 480 rotate --angle 90 compress --bitrate 1M
+  ffmpeg-tool -i input.mp4 -o output.mp4 resize --width 720 --height 480 rotate --angle 90 compress 
   ```

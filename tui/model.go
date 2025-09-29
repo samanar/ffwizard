@@ -4,15 +4,30 @@ import (
 	"ffwizard/ffmpeg"
 
 	"github.com/charmbracelet/bubbles/list"
+	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
 type Model struct {
-	list     list.Model
-	step     int
-	choice   string
-	actions  []ffmpeg.Action
-	quitting bool
+	list      list.Model
+	textInput textinput.Model
+	step      uint
+	actions   []ffmpeg.Action
+	quitting  bool
+}
+
+func (m *Model) AppendAction(a ffmpeg.Action) {
+	m.actions = append(m.actions, a)
+}
+
+func (m *Model) AddAction(newAction ffmpeg.Action) {
+	for i, a := range m.actions {
+		if a.Name == newAction.Name {
+			m.actions[i] = newAction
+			return
+		}
+	}
+	m.AppendAction(newAction)
 }
 
 func InitialModel() Model {

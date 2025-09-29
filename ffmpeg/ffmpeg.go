@@ -12,7 +12,8 @@ import (
 type ActionName int
 
 const (
-	Resize ActionName = iota
+	_ ActionName = iota
+	Resize
 	Convert
 	Rotate
 	Mute

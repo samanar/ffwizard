@@ -2,10 +2,12 @@ package tui
 
 import (
 	"ffwizard/ffmpeg"
+
+	"github.com/charmbracelet/bubbles/list"
 )
 
 const (
-	_ = iota
+	MainStep = iota
 	ResizeStep
 	RotateStep
 	ConvertStep
@@ -15,7 +17,7 @@ const (
 	CompressStep
 )
 
-var MainMenuItems = []Item{
+var MainMenuItems = []list.Item{
 	Item{
 		title:    "Resize",
 		desc:     "scale video to given width and height",
@@ -37,7 +39,7 @@ var MainMenuItems = []Item{
 	Item{
 		title:    "Mute",
 		desc:     "Mute vide",
-		goToStep: MuteStep,
+		goToStep: MainStep,
 	},
 	Item{
 		title:    "Hard sub",
@@ -52,11 +54,11 @@ var MainMenuItems = []Item{
 	Item{
 		title:    "Compress",
 		desc:     "Compress video without losing too much quality (lossy)",
-		goToStep: SoftSubStep,
+		goToStep: MainStep,
 	},
 }
 
-var ResizeMenuItems = []Item{
+var ResizeMenuItems = []list.Item{
 	Item{
 		title: "3840x2160 (4K)",
 		desc:  "modern standard for TVs, cameras, YouTube, streaming platforms",
@@ -115,7 +117,7 @@ var ResizeMenuItems = []Item{
 	},
 }
 
-var RotateMenuITems = []Item{
+var RotateMenuITems = []list.Item{
 	Item{
 		title: "90° clockwise + vertical flip",
 		action: ffmpeg.Action{
@@ -139,7 +141,7 @@ var RotateMenuITems = []Item{
 	},
 }
 
-var ConvertMenuITems = []Item{
+var ConvertMenuITems = []list.Item{
 	Item{
 		title: "mp4",
 		desc:  "Generic purpose. Youtube, phones, web, pretty much everywhere",

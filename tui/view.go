@@ -5,7 +5,10 @@ func (m Model) View() string {
 		return "Exiting wizard...\n"
 	}
 
-	if m.step == 0 {
+	switch m.step {
+	case HardSubStep:
+		return m.textInput.View()
+	default:
 		return m.list.View()
 	}
 
