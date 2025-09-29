@@ -6,7 +6,7 @@ func (m Model) View() string {
 	}
 
 	switch m.step {
-	case HardSubStep:
+	case HardSubStep, SoftSubStep:
 		return m.textInput.View()
 	default:
 		return m.list.View()

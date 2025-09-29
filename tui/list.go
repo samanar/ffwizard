@@ -80,7 +80,7 @@ func GetInput(placeholder string) textinput.Model {
 	ti.Placeholder = placeholder
 	ti.Focus()
 	ti.CharLimit = 300
-	ti.Width = 30
+	ti.Width = 300
 
 	return ti
 }

@@ -39,6 +39,10 @@ var MainMenuItems = []list.Item{
 	Item{
 		title:    "Mute",
 		desc:     "Mute vide",
+		action:   ffmpeg.Action{
+			Name: ffmpeg.Mute,
+			Params: map[string]string{},
+		},
 		goToStep: MainStep,
 	},
 	Item{

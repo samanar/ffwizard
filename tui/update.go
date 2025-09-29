@@ -3,7 +3,6 @@ package tui
 import (
 	"errors"
 	"ffwizard/ffmpeg"
-	"fmt"
 
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
@@ -43,9 +42,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				if i.action.Name != 0 {
 					m.AddAction(i.action)
 				}
-				oldStep := m.step
 				m.step = i.goToStep
-				fmt.Println(m.step)
 				switch m.step {
 				case 0, ConvertStep, CompressStep, RotateStep, ResizeStep:
 					newList, err := getModelListFromStep(m.step)
@@ -55,18 +52,20 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					} else {
 						return m, tea.Quit
 					}
-				case HardSubStep:
-					if oldStep == 0 {
-						var fileName = m.textInput.Value()
-						fmt.Println(fileName)
-						if fileName != "" {
-							m.AddAction(ffmpeg.Action{Name: ffmpeg.AddHardSub, Params: map[string]string{"Subtitle": fileName}})
-							m.step = 0
-							m.list, _ = getModelListFromStep(0)
-							return m, nil
+				case HardSubStep, SoftSubStep:
+					var fileName = m.textInput.Value()
+					if fileName != "" {
+						actionName := ffmpeg.AddHardSub
+						if m.step == SoftSubStep {
+							actionName = ffmpeg.AddSoftSub
 						}
+						m.AddAction(ffmpeg.Action{Name: actionName, Params: map[string]string{"Subtitle": fileName}})
+						m.step = 0
+						m.list, _ = getModelListFromStep(0)
+						return m, nil
 					}
-					m.textInput = GetInput("Enter name of your hard subtitle file: Ex: hardsub.srt")
+
+					m.textInput = GetInput("Enter name of your  subtitle file: Ex: subtitle.srt")
 					return m, nil
 
 				default:
