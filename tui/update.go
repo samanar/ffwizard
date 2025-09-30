@@ -8,10 +8,14 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-func getModelListFromStep(step uint) (list.Model, error) {
-	switch step {
+func getModelListFromStep(m Model) (list.Model, error) {
+	switch m.step {
 	case 0:
-		return GetList("FFWIZARD", MainMenuItems), nil
+		menuItems := MainMenuItems
+		if len(m.actions) > 0 {
+			menuItems = append(menuItems, Item{title: "Create command", desc: "create your final command", goToStep: FinalStep})
+		}
+		return GetList("FFWIZARD", menuItems), nil
 	case ResizeStep:
 		return GetList("Resize", ResizeMenuItems), nil
 	case RotateStep:
@@ -45,8 +49,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.step = i.goToStep
 				switch m.step {
 				case 0, ConvertStep, CompressStep, RotateStep, ResizeStep:
-					newList, err := getModelListFromStep(m.step)
-					if err != nil {
+					newList, err := getModelListFromStep(m)
+					if err == nil {
 						m.list = newList
 						return m, nil
 					} else {
@@ -61,12 +65,14 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 						}
 						m.AddAction(ffmpeg.Action{Name: actionName, Params: map[string]string{"Subtitle": fileName}})
 						m.step = 0
-						m.list, _ = getModelListFromStep(0)
+						m.list, _ = getModelListFromStep(m)
 						return m, nil
 					}
 
 					m.textInput = GetInput("Enter name of your  subtitle file: Ex: subtitle.srt")
 					return m, nil
+				case FinalStep:
+					return m, tea.Quit
 
 				default:
 					return m, tea.Quit

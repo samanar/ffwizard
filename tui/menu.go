@@ -15,6 +15,7 @@ const (
 	HardSubStep
 	SoftSubStep
 	CompressStep
+	FinalStep
 )
 
 var MainMenuItems = []list.Item{

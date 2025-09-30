@@ -14,6 +14,7 @@ type Model struct {
 	step      uint
 	actions   []ffmpeg.Action
 	quitting  bool
+	actionAdded bool
 }
 
 func (m *Model) AppendAction(a ffmpeg.Action) {
@@ -21,6 +22,7 @@ func (m *Model) AppendAction(a ffmpeg.Action) {
 }
 
 func (m *Model) AddAction(newAction ffmpeg.Action) {
+	m.actionAdded = true
 	for i, a := range m.actions {
 		if a.Name == newAction.Name {
 			m.actions[i] = newAction

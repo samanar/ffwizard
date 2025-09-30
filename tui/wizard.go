@@ -24,6 +24,8 @@ func RunWizard() ([]ffmpeg.Action, error) {
 	if len(model.actions) == 0 {
 		fmt.Println("No actions selected. Exiting.")
 		os.Exit(0)
+	} else {
+		fmt.Println("lots of command found")
 	}
 
 	return model.actions, nil
