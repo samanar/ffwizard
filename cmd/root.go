@@ -101,12 +101,6 @@ func Execute() {
 		}
 	}
 
-	// Post-hook after all subcommands
-	if input == "" {
-		fmt.Println("Input file is required")
-		os.Exit(1)
-	}
-
 	if len(actions) == 0 {
 		var err error
 		actions, err = tui.RunWizard()

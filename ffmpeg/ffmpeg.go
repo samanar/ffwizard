@@ -7,6 +7,8 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	shellquote "github.com/kballard/go-shellquote"
 )
 
 type ActionName int
@@ -158,9 +160,16 @@ func buildCommand(input, output string, actions []Action) []string {
 }
 
 func RunFFmpeg(input, output string, actions []Action) error {
+	if input == "" {
+		input = "sample-input.mp4"
+	}
+	if output == "" {
+		output = "output.mp4"
+	}
 	args := buildCommand(input, output, actions)
-
-	fmt.Println(args)
+	args = append([]string{"ffmped"}, args...)
+	fmt.Println("Your ffmpeg command is")
+	fmt.Println(shellquote.Join(args...))
 	return nil
 
 	// cmd := exec.Command("ffmpeg", args...)

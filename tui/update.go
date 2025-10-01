@@ -12,10 +12,11 @@ func getModelListFromStep(m Model) (list.Model, error) {
 	switch m.step {
 	case 0:
 		menuItems := MainMenuItems
-		if len(m.actions) > 0 {
+		if len(tuiActions) > 0 {
 			menuItems = append(menuItems, Item{title: "Create command", desc: "create your final command", goToStep: FinalStep})
+			menuItems = append([]list.Item{Item{title: "Create command", desc: "create your final command", goToStep: FinalStep}}, menuItems...)
 		}
-		return GetList("FFWIZARD", menuItems), nil
+		return GetList("ffwizard", menuItems), nil
 	case ResizeStep:
 		return GetList("Resize", ResizeMenuItems), nil
 	case RotateStep:

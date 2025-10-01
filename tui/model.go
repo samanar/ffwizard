@@ -8,24 +8,23 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
+var tuiActions []ffmpeg.Action
+
 type Model struct {
 	list      list.Model
 	textInput textinput.Model
 	step      uint
-	actions   []ffmpeg.Action
 	quitting  bool
-	actionAdded bool
 }
 
 func (m *Model) AppendAction(a ffmpeg.Action) {
-	m.actions = append(m.actions, a)
+	tuiActions = append(tuiActions, a)
 }
 
 func (m *Model) AddAction(newAction ffmpeg.Action) {
-	m.actionAdded = true
-	for i, a := range m.actions {
+	for i, a := range tuiActions {
 		if a.Name == newAction.Name {
-			m.actions[i] = newAction
+			tuiActions[i] = newAction
 			return
 		}
 	}
@@ -34,9 +33,8 @@ func (m *Model) AddAction(newAction ffmpeg.Action) {
 
 func InitialModel() Model {
 	return Model{
-		step:    0,
-		list:    GetList("ffwizard", MainMenuItems),
-		actions: []ffmpeg.Action{},
+		step: 0,
+		list: GetList("ffwizard", MainMenuItems),
 	}
 }
 

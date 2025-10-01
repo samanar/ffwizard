@@ -16,17 +16,15 @@ func RunWizard() ([]ffmpeg.Action, error) {
 		return nil, err
 	}
 
-	model, ok := m.(Model)
+	_, ok := m.(Model)
 	if !ok {
 		return nil, fmt.Errorf("unexpected model type")
 	}
 
-	if len(model.actions) == 0 {
+	if len(tuiActions) == 0 {
 		fmt.Println("No actions selected. Exiting.")
 		os.Exit(0)
-	} else {
-		fmt.Println("lots of command found")
 	}
 
-	return model.actions, nil
+	return tuiActions, nil
 }
