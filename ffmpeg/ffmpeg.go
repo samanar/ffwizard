@@ -25,7 +25,8 @@ const (
 	ReplaceAudio
 	AddHardSub
 	AddSoftSub
-	Compress
+	CRF
+	VideoBitrate
 )
 
 type Action struct {
@@ -174,8 +175,20 @@ func buildCommand(input, output string, actions []Action) []string {
 			}
 			args = append(args, fmt.Sprintf("-vf transpose=%s", transpose))
 
-		case Compress:
-			args = append(args, "-vcodec libx264 -crf 28 -preset fast -acodec aac -b:a 128k")
+		case CRF:
+			crf := action.Params["Crf"]
+			if crf == "" {
+				crf = "23"
+			}
+			args = append(args, fmt.Sprintf("-vcodec libx264 -crf %s", crf))
+
+		case VideoBitrate:
+			VideoBitrate := action.Params["VideoBitrate"]
+			if VideoBitrate == "" {
+				VideoBitrate = "2000k"
+			}
+			args = append(args, fmt.Sprintf("-b:v %s -b:a 128k", VideoBitrate))
+
 		}
 
 	}
@@ -191,7 +204,7 @@ func RunFFmpeg(input, output string, actions []Action) error {
 		output = "output.mp4"
 	}
 	args := buildCommand(input, output, actions)
-	args = append([]string{"ffmped"}, args...)
+	args = append([]string{"ffmpeg"}, args...)
 	fmt.Println("Your ffmpeg command is")
 	fmt.Println(shellquote.Join(args...))
 	return nil

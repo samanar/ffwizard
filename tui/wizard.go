@@ -3,6 +3,7 @@ package tui
 import (
 	"ffwizard/ffmpeg"
 	"fmt"
+	"log"
 	"os"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -11,14 +12,8 @@ import (
 // RunWizard launches the Bubbletea wizard
 func RunWizard() ([]ffmpeg.Action, error) {
 	p := tea.NewProgram(InitialModel(), tea.WithAltScreen())
-	m, err := p.Run()
-	if err != nil {
-		return nil, err
-	}
-
-	_, ok := m.(Model)
-	if !ok {
-		return nil, fmt.Errorf("unexpected model type")
+	if _, err := p.Run(); err != nil {
+		log.Fatal(err)
 	}
 
 	if len(tuiActions) == 0 {

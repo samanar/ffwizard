@@ -27,6 +27,12 @@ func getModelListFromStep(m Model) (list.Model, error) {
 		return GetList("Sound optionw", SoundMeuItems), nil
 	case ChangeVolumeStep:
 		return GetList("Change volume to", ChangeVolumeMenuItems), nil
+	case CompressStep:
+		return GetList("Compress", CompressMenuItems), nil
+	case CrfStep:
+		return GetList("Change Crf to", CrfMenuItems), nil
+	case VideoBitrateStep:
+		return GetList("Video bitrate to", VideoBitrateMenu), nil
 	default:
 		return list.Model{}, errors.New("invalid step")
 	}
@@ -53,14 +59,6 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				}
 				m.step = i.goToStep
 				switch m.step {
-				case 0, ConvertStep, CompressStep, RotateStep, ResizeStep, SoundStep, ChangeVolumeStep:
-					newList, err := getModelListFromStep(m)
-					if err == nil {
-						m.list = newList
-						return m, nil
-					} else {
-						return m, tea.Quit
-					}
 
 				case HardSubStep, SoftSubStep:
 					var fileName = m.textInput.Value()
@@ -94,7 +92,13 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					return m, tea.Quit
 
 				default:
-					return m, tea.Quit
+					newList, err := getModelListFromStep(m)
+					if err == nil {
+						m.list = newList
+						return m, nil
+					} else {
+						return m, tea.Quit
+					}
 				}
 			}
 			return m, tea.Quit

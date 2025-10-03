@@ -18,6 +18,8 @@ const (
 	SoundStep
 	ChangeVolumeStep
 	ReplaceAudioStep
+	CrfStep
+	VideoBitrateStep
 	FinalStep
 )
 
@@ -41,6 +43,11 @@ var MainMenuItems = []list.Item{
 		goToStep: ConvertStep,
 	},
 	Item{
+		title:    "Compress",
+		desc:     "Compress video without losing too much quality (lossy)",
+		goToStep: CompressStep,
+	},
+	Item{
 		title:    "Sound",
 		desc:     "Change sound options",
 		goToStep: SoundStep,
@@ -54,11 +61,6 @@ var MainMenuItems = []list.Item{
 		title:    "Soft sub",
 		desc:     "Add soft subtitle to your video",
 		goToStep: SoftSubStep,
-	},
-	Item{
-		title:    "Compress",
-		desc:     "Compress video without losing too much quality (lossy)",
-		goToStep: MainStep,
 	},
 }
 
@@ -290,6 +292,81 @@ var ChangeVolumeMenuItems = []list.Item{
 		action: ffmpeg.Action{
 			Name:   ffmpeg.ChangeVolume,
 			Params: map[string]string{"Volume": "2.0"},
+		},
+	},
+}
+
+var CompressMenuItems = []list.Item{
+	Item{
+		title:    "CRF(quality)",
+		action:   ffmpeg.Action{},
+		goToStep: CrfStep,
+	},
+	Item{
+		title:    "Video bitrate",
+		action:   ffmpeg.Action{},
+		goToStep: VideoBitrateStep,
+	},
+}
+
+var CrfMenuItems = []list.Item{
+	Item{
+		title: "18 - high quality",
+		action: ffmpeg.Action{
+			Name:   ffmpeg.CRF,
+			Params: map[string]string{"Crf": "18"},
+		},
+	},
+	Item{
+		title: "23 - balanced quality",
+		action: ffmpeg.Action{
+			Name:   ffmpeg.CRF,
+			Params: map[string]string{"Crf": "23"},
+		},
+	},
+	Item{
+		title: "27 - small size. low quality",
+		action: ffmpeg.Action{
+			Name:   ffmpeg.CRF,
+			Params: map[string]string{"Crf": "27"},
+		},
+	},
+	Item{
+		title: "30 - extreme compression",
+		action: ffmpeg.Action{
+			Name:   ffmpeg.CRF,
+			Params: map[string]string{"Crf": "30"},
+		},
+	},
+}
+
+var VideoBitrateMenu = []list.Item{
+	Item{
+		title: "8M - crisp detail but high upload bandwidth",
+		action: ffmpeg.Action{
+			Name:   ffmpeg.VideoBitrate,
+			Params: map[string]string{"VideoBitrate": "8000k"},
+		},
+	},
+	Item{
+		title: "4M - blu-ray quality streaming",
+		action: ffmpeg.Action{
+			Name:   ffmpeg.VideoBitrate,
+			Params: map[string]string{"VideoBitrate": "4000k"},
+		},
+	},
+	Item{
+		title: "2M - balanced quality. suitable for youtube",
+		action: ffmpeg.Action{
+			Name:   ffmpeg.VideoBitrate,
+			Params: map[string]string{"VideoBitrate": "2000k"},
+		},
+	},
+	Item{
+		title: "800k - good for old devices and low-bandwidth streaming",
+		action: ffmpeg.Action{
+			Name:   ffmpeg.VideoBitrate,
+			Params: map[string]string{"VideoBitrate": "800k"},
 		},
 	},
 }
