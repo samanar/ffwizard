@@ -19,6 +19,10 @@ const (
 	Convert
 	Rotate
 	Mute
+	NormalizeAudio
+	ChangeVolume
+	ExtractAudio
+	ReplaceAudio
 	AddHardSub
 	AddSoftSub
 	Compress
@@ -111,45 +115,65 @@ func buildCommand(input, output string, actions []Action) []string {
 	args := []string{"-i", input}
 	for _, action := range actions {
 		switch action.Name {
+
 		case Resize:
 			args = append(args, "-vf", fmt.Sprintf("scale=%s:%s", action.Params["Width"], action.Params["Height"]))
+
 		case Convert:
-			{
-				format := action.Params["Format"]
-				v, a, extra, ok := getFormatParams(format)
-				fmt.Println(v, a, extra)
-				if !ok {
-					fmt.Printf("Format %s not supported\n", format)
-					os.Exit(1)
-				}
-				args = append(args, fmt.Sprintf("-c:v %s -c:a %s %s", v, a, extra))
+			format := action.Params["Format"]
+			v, a, extra, ok := getFormatParams(format)
+			if !ok {
+				fmt.Printf("Format %s not supported\n", format)
+				os.Exit(1)
 			}
+			args = append(args, fmt.Sprintf("-c:v %s -c:a %s %s", v, a, extra))
+
 		case AddHardSub:
 			args = append(args, fmt.Sprintf("-vf subtitle=%s", action.Params["Subtitle"]))
+
 		case AddSoftSub:
-			{
-				subTitleEncoding, ok := getSubTitleEncoding(getFormat(output, actions))
-				if ok {
-					args = append(args, fmt.Sprintf("-i %s -c:s %s", action.Params["Subtitle"], subTitleEncoding))
-				}
+			subTitleEncoding, ok := getSubTitleEncoding(getFormat(output, actions))
+			if ok {
+				args = append(args, fmt.Sprintf("-i %s -c:s %s", action.Params["Subtitle"], subTitleEncoding))
 			}
+
 		case Mute:
 			args = append(args, "-an")
-		case Rotate:
-			{
-				angleStr := action.Params["Angle"]
-				angle, err := strconv.Atoi(angleStr)
-				if err != nil {
-					fmt.Println("Invalid angle:", err)
-					os.Exit(1)
-				}
-				transpose, err := getTransposeFromAngle(angle)
-				if err != nil {
-					fmt.Println("Error getting transpose:", err)
-					os.Exit(1)
-				}
-				args = append(args, fmt.Sprintf("-vf transpose=%s", transpose))
+
+		case ChangeVolume:
+			volumeParameter := action.Params["Volume"]
+			if volumeParameter == "" {
+				volumeParameter = "2.0"
 			}
+			args = append(args, fmt.Sprintf("-af volume %s", volumeParameter))
+
+		case ExtractAudio:
+			args = append(args, "-q:a 0 -map a")
+
+		case NormalizeAudio:
+			args = append(args, "-af loudnorm")
+
+		case ReplaceAudio:
+			replace := action.Params["Audio"]
+			if replace == "" {
+				replace = "newAudio.mp3"
+			}
+			args = append(args, fmt.Sprintf("-i %s -c:v copy -map 0:v:0 -map 1:a:0", replace))
+
+		case Rotate:
+			angleStr := action.Params["Angle"]
+			angle, err := strconv.Atoi(angleStr)
+			if err != nil {
+				fmt.Println("Invalid angle:", err)
+				os.Exit(1)
+			}
+			transpose, err := getTransposeFromAngle(angle)
+			if err != nil {
+				fmt.Println("Error getting transpose:", err)
+				os.Exit(1)
+			}
+			args = append(args, fmt.Sprintf("-vf transpose=%s", transpose))
+
 		case Compress:
 			args = append(args, "-vcodec libx264 -crf 28 -preset fast -acodec aac -b:a 128k")
 		}

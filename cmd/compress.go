@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var compressCmd = &cobra.Command{
+var CompressCmd = &cobra.Command{
 	Use:   "compress",
 	Short: "compress your video",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -16,5 +16,5 @@ var compressCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(compressCmd)
+	rootCmd.AddCommand(CompressCmd)
 }

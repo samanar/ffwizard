@@ -22,7 +22,11 @@ func getModelListFromStep(m Model) (list.Model, error) {
 	case RotateStep:
 		return GetList("Rotate", RotateMenuITems), nil
 	case ConvertStep:
-		return GetList("Rotate", ConvertMenuITems), nil
+		return GetList("Convert to", ConvertMenuITems), nil
+	case SoundStep:
+		return GetList("Sound optionw", SoundMeuItems), nil
+	case ChangeVolumeStep:
+		return GetList("Change volume to", ChangeVolumeMenuItems), nil
 	default:
 		return list.Model{}, errors.New("invalid step")
 	}
@@ -49,7 +53,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				}
 				m.step = i.goToStep
 				switch m.step {
-				case 0, ConvertStep, CompressStep, RotateStep, ResizeStep:
+				case 0, ConvertStep, CompressStep, RotateStep, ResizeStep, SoundStep, ChangeVolumeStep:
 					newList, err := getModelListFromStep(m)
 					if err == nil {
 						m.list = newList
@@ -57,6 +61,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					} else {
 						return m, tea.Quit
 					}
+
 				case HardSubStep, SoftSubStep:
 					var fileName = m.textInput.Value()
 					if fileName != "" {
@@ -66,12 +71,25 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 						}
 						m.AddAction(ffmpeg.Action{Name: actionName, Params: map[string]string{"Subtitle": fileName}})
 						m.step = 0
+						m.textInput.Reset()
 						m.list, _ = getModelListFromStep(m)
 						return m, nil
 					}
-
 					m.textInput = GetInput("Enter name of your  subtitle file: Ex: subtitle.srt")
 					return m, nil
+
+				case ReplaceAudioStep:
+					var fileName = m.textInput.Value()
+					if fileName != "" {
+						m.AddAction(ffmpeg.Action{Name: ffmpeg.ReplaceAudio, Params: map[string]string{"Audio": fileName}})
+						m.step = 0
+						m.textInput.Reset()
+						m.list, _ = getModelListFromStep(m)
+						return m, nil
+					}
+					m.textInput = GetInput("Enter name of your replace audio file: Ex: replace.mp3")
+					return m, nil
+
 				case FinalStep:
 					return m, tea.Quit
 
@@ -85,7 +103,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	var cmd tea.Cmd
 	switch m.step {
-	case HardSubStep, SoftSubStep:
+	case HardSubStep, SoftSubStep, ReplaceAudioStep:
 		m.textInput, cmd = m.textInput.Update(msg)
 	default:
 		m.list, cmd = m.list.Update(msg)

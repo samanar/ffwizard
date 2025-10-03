@@ -10,7 +10,7 @@ import (
 
 // RunWizard launches the Bubbletea wizard
 func RunWizard() ([]ffmpeg.Action, error) {
-	p := tea.NewProgram(InitialModel())
+	p := tea.NewProgram(InitialModel(), tea.WithAltScreen())
 	m, err := p.Run()
 	if err != nil {
 		return nil, err

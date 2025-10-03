@@ -9,7 +9,7 @@ import (
 var softSub string
 
 // hardSubCmd represents the hardSub command
-var softSubCmd = &cobra.Command{
+var SoftSubCmd = &cobra.Command{
 	Use:   "softSub",
 	Short: "Add soft subtitle to your video. Usage: --subtitle soft-subtitle.srt",
 
@@ -24,5 +24,5 @@ var softSubCmd = &cobra.Command{
 }
 
 func init() {
-	softSubCmd.Flags().StringVarP(&softSub, "subtitle", "", "", "adding subtitle")
+	SoftSubCmd.Flags().StringVarP(&softSub, "subtitle", "", "", "adding subtitle")
 }

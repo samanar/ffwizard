@@ -8,8 +8,8 @@ import (
 
 var subtitle string
 
-// hardSubCmd represents the hardSub command
-var hardSubCmd = &cobra.Command{
+// HardSubCmd represents the hardSub command
+var HardSubCmd = &cobra.Command{
 	Use:   "hardSub",
 	Short: "Add hard subtitle to your video. Usage: --subtitle hard-subtitle.srt",
 
@@ -24,5 +24,5 @@ var hardSubCmd = &cobra.Command{
 }
 
 func init() {
-	hardSubCmd.Flags().StringVarP(&subtitle, "subtitle", "", "", "adding subtitle")
+	HardSubCmd.Flags().StringVarP(&subtitle, "subtitle", "", "", "adding subtitle")
 }

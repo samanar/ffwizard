@@ -17,7 +17,7 @@ func NormalizeAngle(angle string) string {
 	}
 }
 
-var rotateCmd = &cobra.Command{
+var RotateCmd = &cobra.Command{
 	Use:   "rotate",
 	Short: "Rotate your video. Usage: --angle [90, 180 , 270, 360]",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -28,5 +28,5 @@ var rotateCmd = &cobra.Command{
 }
 
 func init() {
-	rotateCmd.Flags().StringVarP(&angle, "angle", "", "", "Rotation angle")
+	RotateCmd.Flags().StringVarP(&angle, "angle", "", "", "Rotation angle")
 }

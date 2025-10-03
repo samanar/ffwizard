@@ -8,7 +8,7 @@ import (
 
 var format string
 
-var convertCommand = &cobra.Command{
+var ConvertCommand = &cobra.Command{
 	Use:   "convert",
 	Short: "Convert your video to a new format like mp4, mkv , ...",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -19,5 +19,5 @@ var convertCommand = &cobra.Command{
 }
 
 func init() {
-	convertCommand.Flags().StringVarP(&format, "format", "", "", "Video format")
+	ConvertCommand.Flags().StringVarP(&format, "format", "", "", "Video format")
 }

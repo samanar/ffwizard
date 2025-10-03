@@ -8,8 +8,8 @@ import (
 
 var width, height string
 
-// resizeCmd represents the resize command
-var resizeCmd = &cobra.Command{
+// ResizeCmd represents the resize command
+var ResizeCmd = &cobra.Command{
 	Use:   "resize",
 	Short: "Resize your video. Usage : --width 1920 --height 1080",
 
@@ -28,6 +28,6 @@ var resizeCmd = &cobra.Command{
 }
 
 func init() {
-	resizeCmd.Flags().StringVarP(&width, "width", "", "", "Target width")
-	resizeCmd.Flags().StringVarP(&height, "height", "", "", "Target height")
+	ResizeCmd.Flags().StringVarP(&width, "width", "", "", "Target width")
+	ResizeCmd.Flags().StringVarP(&height, "height", "", "", "Target height")
 }

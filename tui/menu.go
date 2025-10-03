@@ -15,6 +15,9 @@ const (
 	HardSubStep
 	SoftSubStep
 	CompressStep
+	SoundStep
+	ChangeVolumeStep
+	ReplaceAudioStep
 	FinalStep
 )
 
@@ -38,13 +41,9 @@ var MainMenuItems = []list.Item{
 		goToStep: ConvertStep,
 	},
 	Item{
-		title:    "Mute",
-		desc:     "Mute vide",
-		action:   ffmpeg.Action{
-			Name: ffmpeg.Mute,
-			Params: map[string]string{},
-		},
-		goToStep: MainStep,
+		title:    "Sound",
+		desc:     "Change sound options",
+		goToStep: SoundStep,
 	},
 	Item{
 		title:    "Hard sub",
@@ -233,6 +232,64 @@ var ConvertMenuITems = []list.Item{
 		action: ffmpeg.Action{
 			Name:   ffmpeg.Convert,
 			Params: map[string]string{"Format": "flv"},
+		},
+	},
+}
+
+var SoundMeuItems = []list.Item{
+	Item{
+		title: "Mute audio",
+		action: ffmpeg.Action{
+			Name:   ffmpeg.Mute,
+			Params: map[string]string{},
+		},
+	},
+	Item{
+		title:    "Change volume",
+		action:   ffmpeg.Action{},
+		goToStep: ChangeVolumeStep,
+	},
+	Item{
+		title: "Extract audio",
+		action: ffmpeg.Action{
+			Name:   ffmpeg.ExtractAudio,
+			Params: map[string]string{},
+		},
+	},
+	Item{
+		title:    "Replace audio",
+		action:   ffmpeg.Action{},
+		goToStep: ReplaceAudioStep,
+	},
+	Item{
+		title: "Normalize audio",
+		action: ffmpeg.Action{
+			Name:   ffmpeg.NormalizeAudio,
+			Params: map[string]string{},
+		},
+	},
+}
+
+var ChangeVolumeMenuItems = []list.Item{
+	Item{
+		title: "0.5",
+		action: ffmpeg.Action{
+			Name:   ffmpeg.ChangeVolume,
+			Params: map[string]string{"Volume": "0.5"},
+		},
+	},
+	Item{
+		title: "1.5",
+		action: ffmpeg.Action{
+			Name:   ffmpeg.ChangeVolume,
+			Params: map[string]string{"Volume": "1.5"},
+		},
+	},
+	Item{
+		title: "2.0",
+		action: ffmpeg.Action{
+			Name:   ffmpeg.ChangeVolume,
+			Params: map[string]string{"Volume": "2.0"},
 		},
 	},
 }
