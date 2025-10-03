@@ -47,7 +47,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&input, "input", "i", "", "Input video file")
 	rootCmd.PersistentFlags().StringVarP(&output, "output", "o", "", "Output video file")
 
-	rootCmd.AddCommand(resizeCmd, rotateCmd, compressCmd, hardSubCmd, softSubCmd, muteCmd)
+	rootCmd.AddCommand(resizeCmd, rotateCmd, compressCmd, hardSubCmd, softSubCmd, convertCommand, muteCmd)
 }
 
 func Execute() {
