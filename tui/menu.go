@@ -20,10 +20,17 @@ const (
 	ReplaceAudioStep
 	CrfStep
 	VideoBitrateStep
+	PresetSelectStep
 	FinalStep
 )
 
 var MainMenuItems = []list.Item{
+	Item{
+		title:    "Select Presets",
+		desc:     "select predefined commands for common use cases",
+		action:   ffmpeg.Action{},
+		goToStep: PresetSelectStep,
+	},
 	Item{
 		title:    "Resize",
 		desc:     "scale video to given width and height",
@@ -369,4 +376,18 @@ var VideoBitrateMenu = []list.Item{
 			Params: map[string]string{"VideoBitrate": "800k"},
 		},
 	},
+}
+
+func getPresetMenuItems() []list.Item {
+	var presetMenuItems []list.Item
+	for _, preset := range ffmpeg.Presets {
+		presetMenuItems = append(presetMenuItems, Item{
+			title: preset.String(),
+			action: ffmpeg.Action{
+				Name:   ffmpeg.PresetAction,
+				Params: map[string]string{"Preset": preset.String()},
+			},
+		})
+	}
+	return presetMenuItems
 }

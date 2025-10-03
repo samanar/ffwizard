@@ -33,6 +33,8 @@ func getModelListFromStep(m Model) (list.Model, error) {
 		return GetList("Change Crf to", CrfMenuItems), nil
 	case VideoBitrateStep:
 		return GetList("Video bitrate to", VideoBitrateMenu), nil
+	case PresetSelectStep:
+		return GetList("Select Preset", getPresetMenuItems()), nil
 	default:
 		return list.Model{}, errors.New("invalid step")
 	}
@@ -56,6 +58,9 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if ok {
 				if i.action.Name != 0 {
 					m.AddAction(i.action)
+					if i.action.Name == ffmpeg.PresetAction {
+						return m, tea.Quit
+					}
 				}
 				m.step = i.goToStep
 				switch m.step {

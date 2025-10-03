@@ -27,6 +27,7 @@ const (
 	AddSoftSub
 	CRF
 	VideoBitrate
+	PresetAction
 )
 
 type Action struct {
@@ -120,6 +121,19 @@ func buildCommand(input, output string, actions []Action) []string {
 		case Resize:
 			args = append(args, "-vf", fmt.Sprintf("scale=%s:%s", action.Params["Width"], action.Params["Height"]))
 
+		case PresetAction:
+			preset := action.Params["Preset"]
+			if preset == "" {
+				preset = Youtube4k.String()
+			}
+			presetType, err := ParsePreset(preset)
+			if err != nil {
+				fmt.Printf("Invalid Preset selected")
+				os.Exit(1)
+			}
+			presetCommand, _ := presetType.Command()
+			args = append(args, presetCommand)
+
 		case Convert:
 			format := action.Params["Format"]
 			v, a, extra, ok := getFormatParams(format)
@@ -209,11 +223,11 @@ func RunFFmpeg(input, output string, actions []Action) error {
 
 	// Ask for confirmation
 	reader := bufio.NewReader(os.Stdin)
-	fmt.Print("Do you want to run this command? (y/n): ")
+	fmt.Print("Do you want to run this command? (Y/n): ")
 	confirm, _ := reader.ReadString('\n')
 	confirm = strings.TrimSpace(confirm)
 
-	if confirm == "y" || confirm == "Y" {
+	if confirm == "y" || confirm == "Y" || confirm == "" {
 		// Run the command
 		cmd := exec.Command("ffmpeg", args...)
 		cmd.Stdout = os.Stdout

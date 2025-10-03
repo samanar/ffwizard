@@ -11,9 +11,4 @@ func (m Model) View() string {
 	default:
 		return m.list.View()
 	}
-
-	return `
-Action added. 
-Press another number to add more, or press enter to finish.
-`
 }
