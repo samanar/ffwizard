@@ -1,6 +1,6 @@
 # FFWizard 🎬✨
 
-A friendly FFmpeg CLI + TUI wizard built with Go, Cobra, and Bubble Tea. Make video processing simple and enjoyable!
+A friendly FFmpeg CLI + TUI wizard built with Go
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/samanar/ffwizard)](https://goreportcard.com/report/github.com/samanar/ffwizard)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
