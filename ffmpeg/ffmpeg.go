@@ -1,14 +1,14 @@
 package ffmpeg
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
-
-	shellquote "github.com/kballard/go-shellquote"
 )
 
 type ActionName int
@@ -204,13 +204,29 @@ func RunFFmpeg(input, output string, actions []Action) error {
 		output = "output.mp4"
 	}
 	args := buildCommand(input, output, actions)
-	args = append([]string{"ffmpeg"}, args...)
-	fmt.Println("Your ffmpeg command is")
-	fmt.Println(shellquote.Join(args...))
+	fmt.Println("Your command is:")
+	fmt.Println("ffmpeg " + strings.Join(args, " "))
+
+	// Ask for confirmation
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("Do you want to run this command? (y/n): ")
+	confirm, _ := reader.ReadString('\n')
+	confirm = strings.TrimSpace(confirm)
+
+	if confirm == "y" || confirm == "Y" {
+		// Run the command
+		cmd := exec.Command("ffmpeg", args...)
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+
+		err := cmd.Run()
+		if err != nil {
+			fmt.Println("Error running ffmpeg:", err)
+			return err
+		} else {
+			fmt.Println("FFmpeg finished successfully!")
+		}
+	}
 	return nil
 
-	// cmd := exec.Command("ffmpeg", args...)
-	// cmd.Stdout = os.Stdout
-	// cmd.Stderr = os.Stderr
-	// return cmd.Run()
 }
