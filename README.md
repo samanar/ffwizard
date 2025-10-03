@@ -11,7 +11,6 @@ A friendly FFmpeg CLI + TUI wizard built with Go
 - **⛓️ Command Chaining**: Combine multiple operations in a single FFmpeg run
 - **🎯 Simple Syntax**: Intuitive commands that hide FFmpeg complexity
 - **📊 Interactive TUI**: Step-by-step wizard with beautiful Bubble Tea interface
-- **🚀 Automation Ready**: Perfect for scripts and batch processing
 - **💡 Beginner Friendly**: No need to memorize complex FFmpeg flags
 
 ## 📦 Installation
